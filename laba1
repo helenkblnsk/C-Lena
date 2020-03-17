@@ -1,0 +1,237 @@
+#include<iostream>
+#include<ctime>
+#include<stdlib.h>
+
+
+using namespace std;
+
+struct date
+{
+	unsigned int day;
+	unsigned int month;
+	unsigned int year;
+};
+
+struct obj
+{
+	string seller;
+	string nameOfProduct;
+	unsigned int quantity;
+	date receiptData;
+	unsigned int price;
+};
+
+struct student
+{
+	string name;
+	string secondName;
+	string position;
+	date birthday;
+	string patronymic;
+	unsigned int selary;
+};
+
+
+struct ZNAK
+{
+	string name;
+	string secondName;
+	string ZOD;
+	date DATE;
+};
+
+void task8_1()
+{
+	const int tempNumForSizeArr = 5;
+	string arrNameSellers[tempNumForSizeArr] = { "vasia", "fedia", "maksim", "ivan", "dima" };
+	string arrNameOfProduct[tempNumForSizeArr] = { "kolbasa", "blini", "perchatki", "grenki", "navtizin" };
+
+	obj arrOfObjects[tempNumForSizeArr];
+
+	for (int i = 0; i < tempNumForSizeArr; i++)
+	{
+		arrOfObjects[i].nameOfProduct = arrNameOfProduct[i];
+		arrOfObjects[i].seller = arrNameSellers[rand() % tempNumForSizeArr];
+		arrOfObjects[i].price = rand();
+		arrOfObjects[i].quantity = rand();
+
+		arrOfObjects[i].receiptData.day = rand() % 28 + 1;
+		arrOfObjects[i].receiptData.month = rand() % 12 + 1;
+		arrOfObjects[i].receiptData.year = 2020;
+	}
+
+
+	int quantitySoldOfProduct = 0;
+	int maxPriceOfProduct = 0;
+	int theBigestPriceIndex = 0;
+
+	for (int i = 0; i < tempNumForSizeArr; i++)
+	{
+		if (arrOfObjects[i].seller == "ivan")
+		{
+			cout << "nameOfProduct: " << (arrOfObjects[i].nameOfProduct) << endl;
+			cout << "price: " << (arrOfObjects[i].price) << endl;
+			cout << "quantity: " << (arrOfObjects[i].quantity) << endl;
+			cout << "seller: " << (arrOfObjects[i].seller) << endl;
+
+			cout << "data: " << (arrOfObjects[i].receiptData.day) << "/" << (arrOfObjects[i].receiptData.month) << "/" << arrOfObjects[i].receiptData.year << endl << endl;
+
+			quantitySoldOfProduct += arrOfObjects[i].quantity;
+			if (maxPriceOfProduct < arrOfObjects[i].price)
+			{
+				maxPriceOfProduct = arrOfObjects[i].price;
+				theBigestPriceIndex = i;
+			}
+		}
+	}
+	cout << "Product sold: " << quantitySoldOfProduct << endl;
+	cout << "Product with max price: " << arrOfObjects[theBigestPriceIndex].nameOfProduct;
+
+
+}
+
+void task8_2()
+{
+	const int QUANTYTY_OF_SRUDENTS = 5;
+	string arrNameStudents[QUANTYTY_OF_SRUDENTS] = { "vasia", "fedia", "maksim", "ivan", "dima" };
+	string arrPatronymicStudents[QUANTYTY_OF_SRUDENTS] = { "vasiaovi4", "fediaovi4", "maksimovi4", "ivanovi4", "dimaovi4" };
+
+	student student_o[QUANTYTY_OF_SRUDENTS];
+
+	for (int i = 0; i < QUANTYTY_OF_SRUDENTS; i++)
+	{
+		student_o[i].name = arrNameStudents[i];
+		student_o[i].secondName = "abramovi4";
+		student_o[i].patronymic = arrPatronymicStudents[rand() % QUANTYTY_OF_SRUDENTS];
+		student_o[i].position = "student";
+		student_o[i].selary = rand();
+
+		student_o[i].birthday.day = rand() % 28 + 1;
+		student_o[i].birthday.month = rand() % 12 + 1;
+		student_o[i].birthday.year = 2020;
+	}
+
+
+
+	date theSmolestStudent = student_o[0].birthday;
+	int rememberIndex = 0;
+	for (int i = 1; i < QUANTYTY_OF_SRUDENTS; i++)
+	{
+		if (theSmolestStudent.year < student_o[i].birthday.year)
+		{
+			if (theSmolestStudent.month < student_o[i].birthday.month)
+			{
+				if (theSmolestStudent.day < student_o[i].birthday.day)
+				{
+					theSmolestStudent = student_o[i].birthday;
+					rememberIndex = i;
+				}
+			}
+		}
+	}
+	cout << "name: " << student_o[rememberIndex].name << endl;
+	cout << "secondName: " << student_o[rememberIndex].secondName << endl;
+	cout << "position: " << student_o[rememberIndex].position << endl;
+	cout << "patronymic: " << student_o[rememberIndex].patronymic << endl;
+	cout << "selary: " << student_o[rememberIndex].selary << endl;
+
+	cout << "birthday: " << (student_o[rememberIndex].birthday.day) << "/" << (student_o[rememberIndex].birthday.month) << "/" << student_o[rememberIndex].birthday.year << endl << endl;
+}
+
+void task8_3()
+{
+	const int QUANTYTY_OF_SRUDENTS = 10;
+	string arrNameStudents[QUANTYTY_OF_SRUDENTS] = { "vasia", "fedia", "maksim", "ivan", "dima" };
+
+	const int SIZE_OF_ZNAK = 12;
+	string arrZnakZod[SIZE_OF_ZNAK] = { "Capricorn" ,"Aquarius","Pisces", "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo","Libra","Scorpio","Sagittarius" };
+
+	ZNAK MASS[QUANTYTY_OF_SRUDENTS];
+
+	string znakForComp;
+	cout << "Enter name of zadiak: ";
+	cin >> znakForComp;
+
+	for (int i = 0; i < QUANTYTY_OF_SRUDENTS; i++)
+	{
+		cout << "enter name: ";
+		cin >> MASS[i].name;
+		cout << "enter secondName: ";
+		cin >> MASS[i].secondName;
+
+
+		MASS[i].DATE.day = rand() % 28 + 1;
+		MASS[i].DATE.month = rand() % 12 + 1;
+		MASS[i].DATE.year = 2020;
+
+		MASS[i].ZOD = arrZnakZod[MASS[i].DATE.month - 1];
+	}
+
+
+	ZNAK temp;
+	for (int i = 0; i < QUANTYTY_OF_SRUDENTS - 1; i++)
+	{
+		for (int j = 0; j < QUANTYTY_OF_SRUDENTS - i - 1; j++)
+		{
+			if (MASS[j].DATE.year > MASS[j + 1].DATE.year)
+			{
+				if (MASS[j].DATE.month > MASS[j + 1].DATE.month)
+				{
+					if (MASS[j].DATE.day > MASS[j + 1].DATE.day)
+					{
+						// меняем элементы местами
+						temp = MASS[j];
+						MASS[j] = MASS[j + 1];
+						MASS[j + 1] = temp;
+					}
+				}
+			}
+		}
+	}
+
+	bool tempForComp = true;
+	for (int i = 0; i < QUANTYTY_OF_SRUDENTS; i++)
+	{
+		if (znakForComp == MASS[i].ZOD)
+		{
+			tempForComp = false;
+			cout << "name: " << MASS[i].name << endl;
+			cout << "secondName: " << MASS[i].secondName << endl;
+			cout << "position: " << MASS[i].ZOD << endl;
+			cout << "birthday: " << (MASS[i].DATE.day) << "/" << (MASS[i].DATE.month) << "/" << MASS[i].DATE.year << endl << endl;
+		}
+
+	}
+	if (tempForComp) cout << "ERROR 404! znak not fond" << endl;
+
+};
+
+
+int main()
+{
+	srand(time(NULL));
+
+	int numOfTask;
+	cout << "Chose num of task 1-3: ";
+	cin >> numOfTask;
+
+	switch (numOfTask)
+	{
+	case 1:
+		task8_1();
+		break;
+	case 2:
+		task8_2();
+		break;
+	case 3:
+		task8_3();
+		break;
+	default:
+		cout << "TAsk not fond!" << endl;
+		break;
+	}
+
+
+	return 0;
+
+};
