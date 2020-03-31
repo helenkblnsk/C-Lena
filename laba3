@@ -1,0 +1,132 @@
+#include <iostream>
+#include <string>
+#include <ctime>
+#include <stdio.h>
+
+
+using namespace std;
+
+void check_anagramma(const string &str1, const string &str2);
+
+
+
+void addSecondSymbol(string &arr)
+{
+  string tempArr = arr;
+  tempArr.resize(tempArr.size() * 2);// задаем размер массива(в 2р) (данные могут потеряться)
+
+  for (int i = 0; i < arr.size(); i++)
+  {
+    tempArr[i * 2] = arr[i];
+    tempArr[i * 2 + 1] = arr[i];
+  }
+  arr = tempArr;
+}
+
+void task1()
+{
+  string arr;
+  cout << "Введите строку (и где-то поставте \";\"): ";
+  getline(cin, arr);
+  getline(cin, arr);// баг
+
+  int varForCount = -1;
+
+  for (int i = 0; i < arr.size(); i++)
+  {
+    if (arr[i] == ';')
+    {
+      varForCount = i;
+      break;
+    }
+  }
+  
+  if (varForCount == -1)cout << "Элемент ; не был введен в строке" << endl;
+  else cout << "До знака ;  " << varForCount << " элемента." << endl;
+
+}
+
+void task2()
+{
+  string arr;
+  cout << "Введите строку (и где-то поставте \"*\"): ";
+  getline(cin, arr);
+  getline(cin, arr);// баг
+
+
+  for (int i = 0; arr[i] != '\0'; i++)
+  {
+    if (arr[i] == '*')  arr.erase(i, 1);// удаляем 1 символ по индексу i
+  }
+
+  addSecondSymbol(arr);// клонируем символы
+
+  cout  << arr << endl;
+}
+
+
+void task3()
+{
+  string str1, str2;
+
+  cout << "Введите строку 1 для проверки анограммы: ";
+  getline(cin, str1);
+  getline(cin, str1);// баг
+
+  cout << "Введите строку 2 для проверки анограммы: ";
+  getline(cin, str2);
+
+  check_anagramma(str1, str2);
+}
+
+
+
+int main()
+{
+  setlocale(LC_ALL, "Rus");
+  srand(time(NULL));
+
+  
+
+  int forSwitch;
+  cout << "Выберете задание 1-3: ";
+  cin >> forSwitch;
+
+  switch (forSwitch)
+  {
+  case 1:
+    task1();
+    break;
+  case 2:
+    task2();
+    break;
+  case 3:
+    task3();
+    break;
+  default:
+    cout << "Задание на найденно." << endl;
+    break;
+  }
+
+
+  system("pause");
+  return 0;
+}
+
+
+void check_anagramma(const string &str1, const string &str2)
+{// идея есть массив запоминаем кол-во его элементов а потом вычитаем кол-во этих елементов 
+  int c[256] = { 0 };
+  int i;
+
+  i = 0;
+  while (str1[i]) c[str1[i++]]++;
+  i = 0;
+  while (str2[i]) c[str2[i++]]--;
+  i = 0;
+  while (!c[i] && i < 256) i++;
+  if (i == 256)
+    printf("\n\"%s\" это анаграмма \"%s\"\n", str1, str2);
+  else
+    printf("\n\"%s\" это НЕ анаграмма  \"%s\"\n", str1, str2);
+}
