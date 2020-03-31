@@ -1,0 +1,336 @@
+#include <iostream>
+#include <string>
+#include <ctime>
+
+using namespace std;
+struct name
+{
+  string F;
+  string I;
+  string O;
+};
+struct adress
+{
+  unsigned int index;
+  string country;
+  string region;
+  string district;
+  string city;
+  string street;
+  unsigned int house;
+  unsigned int apartment;
+};
+struct worker
+{
+  name person;
+  string nationality;
+  tm birthday;
+  adress home;
+  string education;
+
+  unsigned int cehNumber;
+  unsigned int tabelNumber;
+  unsigned int dataOfStartWork;
+};
+
+worker* InitArray(const unsigned int Dimension);
+worker InitBuyer();
+void SearchInfo(worker* Arr, const int size);
+void DisplayBuyer(const worker &Arr);
+void AddPerson(worker *&arr, int &size, int sizeForAdd);
+int main()
+{
+  setlocale(LC_ALL, "Rus");
+  srand(time(NULL));
+
+
+  int sizeBuyerArr;
+  do
+  {
+    cout << "ВВедите кол-во рабчих: ";
+    cin >> sizeBuyerArr;
+  } while (sizeBuyerArr <= 0);
+
+  worker *buyerArr = InitArray(sizeBuyerArr);
+
+  for (int i = 0; i < sizeBuyerArr; i++)
+  {
+    cout << "Рабочий " << i + 1 << ":" << endl << endl;
+
+    buyerArr[i] = InitBuyer();
+
+  }
+  unsigned int varForSwitch;
+  cout << "1 - показать всех рабочих" << endl;
+  cout << "2 - найти информацию о рабочих" << endl;
+  cout << "3 - сколько рабочих добавить" << endl;
+
+  cout << "Выберите действие: ";
+  cin >> varForSwitch;
+
+  switch (varForSwitch)
+  {
+  case 1:
+    for (int i = 0; i < sizeBuyerArr; i++)
+    {
+      DisplayBuyer(buyerArr[i]);
+    }
+    break;
+  case 2:
+    SearchInfo(buyerArr, sizeBuyerArr);
+    break;
+  case 3:
+    unsigned int tempForAddVar;
+    cout << "Сколько рабочих добавить:";
+    cin >> tempForAddVar;
+    AddPerson(buyerArr, sizeBuyerArr, tempForAddVar);
+    break;
+  case 4:
+  default:
+    cout << "Выберите другое действие: " << endl;
+    break;
+  }
+cout << endl << endl << endl;
+    system("pause");
+  return 0;
+
+}
+worker* InitArray(const unsigned int Dimension)
+{
+  worker *arr = new worker[Dimension];
+  return arr;
+}
+worker InitBuyer()
+{
+  worker man;
+
+  getline(cin, man.person.F);// баг какой-то
+  cout << "F: ";
+  getline(cin, man.person.F);
+  cout << "I: ";
+  getline(cin, man.person.I);
+  cout << "O: ";
+  getline(cin, man.person.O);
+
+
+  cout << endl << "образование: ";
+  getline(cin, man.education);
+
+  cout << "Национальность: ";
+  getline(cin, man.nationality);
+
+  cout << "Страна:";
+  getline(cin, man.home.country);
+
+  cout << "Улица:";
+  getline(cin, man.home.street);
+
+  cout << "Регион:";
+  getline(cin, man.home.region);
+
+  cout << "Раен:";
+  getline(cin, man.home.district);
+
+  cout << "Город:";
+  getline(cin, man.home.city);
+
+
+  cout << endl << "Номер цеха:";
+  cin >> man.cehNumber;
+
+  cout << "Index:";
+  cin >> man.home.index;
+
+  cout << "Дом:";
+  cin >> man.home.house;
+
+  cout << "Квартира:";
+  cin >> man.home.apartment;
+
+  cout << "Табеьный номер:";
+  cin >> man.tabelNumber;
+
+  cout << "Год поступления на работу:";
+  cin >> man.dataOfStartWork;
+
+
+  cout << endl << "ДАта рождения:" << endl;
+  cout << "День: ";
+  cin >> man.birthday.tm_mday;// day
+  cout << "Месяц: ";
+  cin >> man.birthday.tm_mon;// month
+  cout << "Год: ";
+  cin >> man.birthday.tm_year;// year
+
+  return man;
+}
+
+void DisplayBuyer(const worker &Arr)
+{
+
+  cout << "F: " << Arr.person.F << endl;
+  cout << "I: " << Arr.person.I << endl;
+  cout << "O: " << Arr.person.O << endl;
+  cout << "Образование: " << Arr.education << endl;
+  cout << "Национальность: " << Arr.nationality << endl;
+  cout << "Страна:" << Arr.home.country << endl;
+  cout << "Улица:" << Arr.home.street << endl;
+  cout << "Регион:" << Arr.home.region << endl;
+  cout << "Раен:" << Arr.home.district << endl;
+  cout << "Город:" << Arr.home.city << endl;
+cout << "Номер цеха:" << Arr.cehNumber << endl;
+  cout << "Index:" << Arr.home.index << endl;
+  cout << "Дом:" << Arr.home.house << endl;
+  cout << "Квартира:" << Arr.home.apartment << endl;
+  cout << "Табельный номер:" << Arr.tabelNumber << endl;
+  cout << "Дата начало работы:" << Arr.dataOfStartWork << endl;
+  cout << "ДАта рождения: " << endl;
+  cout << "Д/М/Г: " << Arr.birthday.tm_mday << "/" << Arr.birthday.tm_mon << "/" << Arr.birthday.tm_year << endl << endl;
+}
+void SearchInfo(worker* Arr, const int size)
+{
+  cout << "Выберите что искать: 1 - число 0 - слово: ";
+  bool temp;
+  cin >> temp;
+
+  if (temp)
+  {
+    int numForSearch;
+    cout << "Введите число: ";
+    cin >> numForSearch;
+
+    for (int i = 0; i < size; i++)
+    {
+      if (Arr[i].cehNumber == numForSearch)
+      {
+        DisplayBuyer(Arr[i]);
+        break;
+      }
+      else if (Arr[i].home.index == numForSearch)
+      {
+        DisplayBuyer(Arr[i]);
+        break;
+      }
+      else if (Arr[i].home.house == numForSearch)
+      {
+        DisplayBuyer(Arr[i]);
+        break;
+      }
+      else if (Arr[i].home.apartment == numForSearch)
+      {
+        DisplayBuyer(Arr[i]);
+        break;
+      }
+      else if (Arr[i].tabelNumber == numForSearch)
+      {
+        DisplayBuyer(Arr[i]);
+        break;
+      }
+      else if (Arr[i].dataOfStartWork == numForSearch)
+      {
+        DisplayBuyer(Arr[i]);
+        break;
+      }
+      else if (Arr[i].birthday.tm_mday == numForSearch)
+      {
+        DisplayBuyer(Arr[i]);
+        break;
+      }
+      else if (Arr[i].birthday.tm_mon == numForSearch)
+      {
+        DisplayBuyer(Arr[i]);
+        break;
+      }
+      else if (Arr[i].birthday.tm_year == numForSearch)
+      {
+        DisplayBuyer(Arr[i]);
+        break;
+      }
+      else
+      {
+        cout << "Info not found!" << endl;
+      }
+    }
+  }
+  else
+  {
+    string wordForSearch;
+    cout << "Введите слово: " << endl;
+    getline(cin, wordForSearch);
+    getline(cin, wordForSearch);
+
+
+    for (int i = 0; i < size; i++)
+    {
+      if (Arr[i].person.F == wordForSearch)
+      {
+        DisplayBuyer(Arr[i]);
+        break;
+      }
+      else if (Arr[i].person.I == wordForSearch)
+      {
+        DisplayBuyer(Arr[i]);
+        break;
+      }
+      else if (Arr[i].person.O == wordForSearch)
+      {
+        DisplayBuyer(Arr[i]);
+        break;
+      }
+      else if (Arr[i].education == wordForSearch)
+      {
+        DisplayBuyer(Arr[i]);
+        break;
+      }
+      else if (Arr[i].home.country == wordForSearch)
+      {
+        DisplayBuyer(Arr[i]);
+        break;
+      }
+      else if (Arr[i].home.street == wordForSearch)
+      {
+        DisplayBuyer(Arr[i]);
+        break;
+      }
+      else if (Arr[i].home.district == wordForSearch)
+      {
+        DisplayBuyer(Arr[i]);
+        break;
+      }
+      else if (Arr[i].home.city == wordForSearch)
+      {
+        DisplayBuyer(Arr[i]);
+        break;
+      }
+      else
+      {
+        cout << "Info not found!" << endl;
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+void AddPerson(worker *&arr, int &size, int sizeForAdd = 1)
+{
+  worker *newArray = new worker[size + sizeForAdd];
+
+  for (int i = 0; i < size; i++)
+  {
+    newArray[i] = arr[i];
+  }
+  for (int i = size; i < size + sizeForAdd; i++)
+  {
+    arr[i] = InitBuyer();
+  }
+
+  delete[] arr;// удаляем осн массив и указатель на него 
+
+  size += sizeForAdd;
+  arr = newArray;
+}
