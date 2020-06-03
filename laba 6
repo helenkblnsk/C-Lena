@@ -1,0 +1,262 @@
+#include <iostream>
+#include <string>
+#include <ctime>
+#include <fstream>
+#include <windows.h>
+
+
+using namespace std;
+
+
+struct PC
+{
+  string name;
+  unsigned int processorSpeed;
+  unsigned int OZU;
+  unsigned int PZU;
+  unsigned int price;
+  
+
+  void showInfo()
+  {
+    cout << "Name:\t\t"    << name << endl;
+    cout << "ProcessorSpeed: " << processorSpeed << endl;
+    cout << "OZU:\t\t"      << OZU << endl;
+    cout << "PZU:\t\t"      << PZU << endl;
+    cout << "Price:\t\t"      << price << endl;
+    cout << endl;
+  }
+  
+};
+
+struct People
+{
+  string name;
+  unsigned int priceForMonth;
+  unsigned int paidMonth;
+  unsigned int willPaidMonth;
+
+
+  void showInfo()
+  {
+    cout << "name: " << name << endl;
+    cout << "priceForMonth: " << priceForMonth << endl;
+    cout << "paidMonth: " << paidMonth << endl;
+    cout << "willPaidMonth: " << willPaidMonth << endl;
+  }
+};
+
+void checkTrablVithFile(const string path)
+{
+  ifstream fin(path);
+  if (!fin)// Проверка открытия файла
+  {
+    ofstream temp(path);
+    if (!temp)
+    {
+      cout << "Не удалось создать файл." << endl;
+      system("pause");
+      return;
+    }
+    temp.close();
+
+    cout << "Файл создан." << endl;
+  }
+  else
+  {
+    cout << "Файл открыт." << endl;
+  }
+  fin.close();
+}
+
+
+void task1()
+{
+  string path = "File1.txt";
+  fstream fstr(path, ios::binary);
+  checkTrablVithFile(path);// проверка проблем с файлом
+  fstr.open(path, ios::out | ios::binary);
+
+
+  unsigned const int SIZE_ARR = 3;
+  PC *pc = new PC[SIZE_ARR];
+
+
+  for (int i = 0; i < SIZE_ARR; i++)
+  {
+    pc[i].name = "Asus";
+    pc[i].processorSpeed = rand() % 5 + 1;
+    pc[i].OZU = 8;
+    pc[i].PZU = 2000;
+    pc[i].price = rand() % 10000 + 10000;
+  }
+
+  for (int i = 0; i < SIZE_ARR; i++)
+    fstr.write((char*)&pc[i], sizeof(PC));
+
+  for (int i = 0; i < SIZE_ARR; i++)// вывод
+    pc[i].showInfo();
+
+
+
+  ///////////////// очистка массива
+  delete[] pc;
+  pc = new PC[SIZE_ARR];
+
+  for (int i = 0; i < SIZE_ARR; i++)// вывод
+    pc[i].showInfo();
+  ////////////////////
+  
+  fstr.close();
+  fstr.open(path, ios::in | ios::binary);
+  //fstr.seekg(0, ios_base::beg | ios::in | ios::binary);// курсор в начало
+
+  for (int i = 0; i < SIZE_ARR; i++)
+    fstr.read((char*)&pc[i], sizeof(PC));
+
+  for (int i = 0; i < SIZE_ARR; i++)
+    pc[i].showInfo();
+
+
+  int tPrice = 0;
+  for (int i = 0; i < SIZE_ARR; i++)
+    if (pc[i].processorSpeed > 2 && pc[i].name == "Asus")
+      tPrice += pc[i].price;
+  
+  cout << "Вся сумма: " << tPrice << endl;
+
+  fstr.close();
+}
+void task2()
+{
+  
+  string str1 = "вапва/*ыва/ ыва/";
+
+  ofstream fout("dta.bin", ios::binary);
+  string::size_type n = str1.size();
+
+
+
+  fout.write((const char*)&n, sizeof(string::size_type));
+  fout.write(str1.c_str(), str1.size());
+  fout.close();
+
+  ifstream fin("dta.bin", ios::binary);
+
+  fin.read((char*)&n, sizeof(string::size_type));
+  string sout(n, 0);
+
+  for (int i = 0; i < n; ++i)
+    fin.read(&sout[i], sizeof(sout[0]));
+
+  fin.close();
+
+  cout << sout << endl;// строка из файла до изменений
+
+  // изменение строки 
+  for (int i = 0; i < sout.length(); i++)
+    if (sout[i] == '*' || sout[i] == '/')sout[i] = '+';
+
+
+  // запись в файл 
+  fout.open("dta.bin", ios::binary | ios::trunc);
+  fout.write((const char*)&n, sizeof(string::size_type));
+  fout.write(sout.c_str(), sout.size());
+  fout.close();
+
+  // чтоние из файла
+  fin.open("dta.bin", ios::binary);
+  fin.read((char*)&n, sizeof(string::size_type));
+
+  for (int i = 0; i < n; ++i)
+    fin.read(&sout[i], sizeof(sout[0]));
+
+  cout << sout << endl;// строка после изменений
+
+}
+void task3()
+{
+  string path = "file3.txt";
+  fstream fs;
+
+  checkTrablVithFile(path);
+  fs.open(path, ios_base::in | ios_base::out | ios_base::trunc);
+
+
+  int sizeArr = 3;
+  People *arr = new People[sizeArr];
+
+  for (int i = 0; i < sizeArr; i++)
+  {
+    arr[i].name = "Petrov P.P.";
+    arr[i].priceForMonth = rand() % 1000 + 1000;
+    arr[i].paidMonth = 8;
+    arr[i].willPaidMonth = rand() % 12;
+    arr[i].showInfo();
+    cout << endl;
+  }
+  
+  
+  for (int i = 0; i < sizeArr; i++)// запись
+    fs.write((char*)&arr[i], sizeof(People));
+
+// изменяем данные в массиве
+  for (int i = 0; i < sizeArr; i++)
+  {
+    arr[i].name = "выаываывку";
+    arr[i].priceForMonth = 0;
+    arr[i].paidMonth = 0;
+    arr[i].willPaidMonth = 0;
+    arr[i].showInfo();
+    cout << endl;
+  }
+
+
+  // переоткрываем
+  fs.close();// курсор в начало
+  fs.open(path, ios::in);
+
+
+
+  for (int i = 0; i < sizeArr; i++)// считываем
+  {
+    fs.read((char*)&arr[i], sizeof(People));
+
+    if (arr[i].willPaidMonth > 3)// если оплаченно более 3х месяцев скидка
+      arr[i].priceForMonth *= 0.95;
+
+    arr[i].showInfo();
+    cout << endl;
+  }
+  
+
+  fs.close();
+}
+
+void main()
+{
+  srand(time(0));
+  setlocale(LC_ALL, "Rus");
+
+  int a;
+  cout << "Выбери задание 1-3:";
+  cin >> a;
+
+  switch (a)
+  {
+  case 1:
+    task1();
+    break;
+  case 2:
+    task2();
+    break;
+  case 3:
+    task3();
+    break;
+  default:
+    cout << "ошибка." << endl;
+    break;
+  }
+
+  system("pause");
+}
